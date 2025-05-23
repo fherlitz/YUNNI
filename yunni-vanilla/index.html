@@ -13,49 +13,121 @@
     <link rel="icon" href="images/favicon.ico">
 </head>
 <body>
+    <div class="side-logo">
+        <a href="#home">
+            <img src="images/logo.png" alt="YUNNI Logo">
+        </a>
+    </div>
     <header>
         <nav class="navbar">
-            <div class="logo"><a href="index.html">YUNNI</a></div>
-            <div class="hamburger d-lg-none">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
             <div class="nav-menu d-lg-block">
                 <ul class="d-lg-flex">
-                    <li class="d-lg-inline-block"><a href="live.html">Live</a></li>
-                    <li class="d-lg-inline-block"><a href="store.html">Store</a></li>
-                    <li class="d-lg-inline-block"><a href="lyrics.html">Lyrics</a></li>
-                    <li class="d-lg-inline-block"><a href="videos.html">Videos</a></li>
-                    <li class="d-lg-inline-block"><a href="releases.html">Releases</a></li>
-                    <li class="d-lg-inline-block"><a href="contact.html">Contact</a></li>
+                    <li class="d-lg-inline-block"><a href="#releases">RELEASES</a></li>
+                    <li class="d-lg-inline-block"><a href="#videos">VIDEOS</a></li>
+                    <li class="d-lg-inline-block"><a href="#tour">TOUR</a></li>
+                    <li class="d-lg-inline-block"><a href="#join">JOIN</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <main>
-        <div class="image-slider">
-            <div class="slide active">
-                <img src="images/slide1.jpg" alt="YUNNI Band Image 1">
-            </div>
-            <div class="slide">
-                <img src="images/slide2.jpg" alt="YUNNI Band Image 2">
-            </div>
-            <div class="slide">
-                <img src="images/slide3.jpg" alt="YUNNI Band Image 3">
-            </div>
-            <div class="slide">
-                <img src="images/slide4.jpg" alt="YUNNI Band Image 4">
-            </div>
-            <div class="slide">
-                <img src="images/slide5.jpg" alt="YUNNI Band Image 5">
-            </div>
-            <div class="slide">
-                <img src="images/slide6.jpg" alt="YUNNI Band Image 6">
+    <section id="home" class="section">
+        <div class="image-slider slide active">
+            <img src="images/cover.jpg" alt="YUNNI Band Image 1">
+            <div class="ep-announcement">
+                <h1>YUNNI PRESENTS</h1>
+                <h1>DEBUT EP "COLORIZED"</h1>
+                <h4>OUT NOW</h4>
+                <div class="ep-buttons">
+                    <a href="https://yunni.bandcamp.com/album/colorized" class="ep-button buy"  target="_blank">BUY EP</a>
+                    <a href="https://open.spotify.com/album/0I1BUl0E4CJbYYjMGcgdCH?si=rsQsIRxWTC6wToa_cD3usQ" class="ep-button listen" target="_blank">LISTEN</a>
+                </div>
             </div>
         </div>
-    </main>
+    </section>
+
+    <section id="releases" class="section content-page">
+        <div class="container mt-5 pt-5">
+            <h2>RELEASES</h2>
+            <div class="artwork-grid">
+                <div class="artwork-item">
+                    <a href="https://open.spotify.com/album/0I1BUl0E4CJbYYjMGcgdCH?si=QQftWTqDSEGx_PjIbKY_XA" target="_blank">
+                        <img src="images/cover.jpg" alt="YUNNI Cover Artwork">
+                    </a>
+                    <h3>COLORIZED</h3>
+                </div>
+                <div class="artwork-item">
+                    <a href="https://open.spotify.com/album/6EAWCnwj7JmZdrQYWsew9p?si=ymm0eV7TT6i5ub2pfxEyMQ" target="_blank">
+                        <img src="images/Artwork_Someday.jpg" alt="YUNNI Artwork 1">
+                    </a>
+                    <h3>SOMEDAY</h3>
+                </div>
+                <div class="artwork-item">
+                    <a href="https://open.spotify.com/album/59aXyFeJVHqoXkzzYid62l?si=d4PiaDnERJKd6rO5mzkecQ" target="_blank">
+                        <img src="images/Artwork_Older_People.jpg" alt="YUNNI Artwork 2">
+                    </a>
+                    <h3>OLDER PEOPLE</h3>
+                </div>
+                <div class="artwork-item">
+                    <a href="https://open.spotify.com/track/0BetvDGkK33ugmuF0dSaCq?si=a07a233eb42644a8" target="_blank">
+                        <img src="images/Artwork_Kidding_Yourself.jpg" alt="YUNNI Artwork 3">
+                    </a>
+                    <h3>KIDDING YOURSELF</h3>
+                </div>
+                <div class="artwork-item">
+                    <a href="https://open.spotify.com/track/45HGuBQgSRYF4VUZq0CLIr?si=573e94ae74e24918" target="_blank">
+                        <img src="images/ARTWORK_YUNNI_MOCHAROCKA.jpg" alt="YUNNI Artwork 3">
+                    </a>
+                    <h3>MOCHAROCKA</h3>
+                </div>
+                <div class="artwork-item">
+                    <a href="https://open.spotify.com/album/1spbY6lulwGc8Ez4Qiu05E?si=q3HQxz5bRqSCV9OgUp-R4g" target="_blank">
+                        <img src="images/BLACK&WHITE.jpg" alt="YUNNI Artwork 3">
+                    </a>
+                    <h3>BLACK & WHITE</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="videos" class="section content-page">
+        <div class="container mt-5 pt-5">
+            <h2>VIDEOS</h2>
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube-nocookie.com/embed/ohBLZYKrFk4?si=dYI71TzB_0YHh9X7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <br>
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube-nocookie.com/embed/-tehwVGul2k?si=zYJOhaDXaY-nX3WH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <br>    
+                    <br>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tour" class="section content-page">
+        <div class="container mt-5 pt-5">
+            <h2>TOUR</h2>
+            <p>
+                Tour dates and information coming soon.
+            </p>
+        </div>
+    </section>
+
+    <section id="join" class="section content-page">
+        <div class="container mt-5 pt-5">
+            <h2>JOIN</h2>
+            <p>
+                FUCKING BOOK US AT
+                <br>
+                <a href="mailto:jason@musicmodeagency.com">jason@musicmodeagency.com</a>
+            </p>
+        </div>
+    </section>
 
     <footer>
         <div class="container-fluid">
