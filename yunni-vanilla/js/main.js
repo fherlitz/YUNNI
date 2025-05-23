@@ -16,14 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
         epAnnouncement.querySelectorAll('h1, h4').forEach(element => {
             element.style.color = 'white';
         });
-        epAnnouncement.querySelectorAll('.ep-button').forEach(button => {
-            button.style.borderColor = 'white';
-            button.style.color = 'white';
-        });
 
         // Change navigation color to white
         navLinks.forEach(link => {
-            link.style.color = 'white';
+            link.classList.add('video-active');
         });
     }, 3000);
 
@@ -34,11 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (rect.bottom > 0) {
             navLinks.forEach(link => {
-                link.style.color = 'white';
+                link.classList.add('video-active');
             });
         } else {
             navLinks.forEach(link => {
-                link.style.color = 'black';
+                link.classList.remove('video-active');
             });
         }
     });
