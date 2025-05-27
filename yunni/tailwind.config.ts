@@ -8,17 +8,18 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        fixture: ['Fixture', 'sans-serif'],
-      },
       colors: {
-        // Add any custom colors here
+        primary: 'var(--primary-color)',
+        secondary: 'var(--secondary-color)',
+        white: 'var(--white)',
+      },
+      fontFamily: {
+        'futura': ['Futura Bold', 'sans-serif'],
+        'gasoek': ['Gasoek One', 'sans-serif'],
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [],
 }
 
 export default config 

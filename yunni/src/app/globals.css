@@ -2,166 +2,174 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom font face */
+@font-face {
+  font-family: 'Futura Bold';
+  src: url('/futura/FuturaCyrillicBold.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Root variables */
 :root {
-  --primary-color: #f7b006;
-  --secondary-color: #052455;
-  --white: #ffffff;
-  --accent-color: #9a0707;
+  --primary-color: black;
+  --secondary-color: #ffb200;
+  --white: #fefdf9;
 }
 
-@font-face {
-  font-family: 'Fixture';
-  src: url('/fonts/Fixture/FixtureUltra-ExtraBold.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+/* Base styles */
+@layer base {
+  body {
+    @apply font-['Futura_Bold'] font-black text-5xl bg-[var(--white)] text-[var(--white)] overflow-x-hidden;
+  }
+
+  p, a, h1, h2, h3, h4, h5, h6, li, ul, ol {
+    @apply font-['Futura_Bold'] font-black text-5xl text-[var(--primary-color)];
+  }
+
+  h2 {
+    @apply text-8xl my-5 text-center tracking-tighter;
+  }
 }
 
-@font-face {
-  font-family: 'Fixture';
-  src: url('/fonts/Fixture/Fixture-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Navbar Styles */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 0 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
-  background: var(--white);
-  backdrop-filter: blur(10px);
-}
-
-.logo a {
-  font-family: "Fixture", sans-serif;
-  font-size: 3rem;
-  font-weight: bold;
-  color: var(--primary-color);
-  margin-left: 20px;
-  letter-spacing: 2px;
-  text-decoration: none;
-}
-
-.hamburger {
-  display: flex;
-  margin-right: 30px;
-  color: var(--primary-color);
-  flex-direction: column;
-  cursor: pointer;
-  z-index: 1001;
-}
-
-.hamburger span {
-  width: 15px;
-  height: 2px;
-  background-color: var(--primary-color);
-  margin: 2px 0;
-}
-
-/* Desktop Navigation */
-@media (min-width: 992px) {
+/* Custom components */
+@layer components {
   .nav-menu {
-    position: static;
-    transform: none;
-    opacity: 1;
-    visibility: visible;
-    background: none;
-    backdrop-filter: none;
-    box-shadow: none;
-    width: auto;
-    margin-right: 20px;
+    @apply static opacity-100 visible bg-transparent backdrop-filter-none shadow-none w-auto mr-10;
   }
 
   .nav-menu ul {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 30px;
+    @apply list-none flex gap-24;
   }
 
   .nav-menu ul li {
-    margin: 0;
+    @apply my-6;
   }
 
   .nav-menu ul li a {
-    font-size: 1rem;
-    padding: 5px 0;
+    @apply text-[var(--primary-color)] no-underline text-2xl transition-colors duration-300 tracking-wider;
+  }
+
+  .nav-menu ul li a:hover {
+    @apply text-[var(--secondary-color)];
+  }
+
+  .nav-menu ul li a.video-active {
+    @apply text-[var(--white)];
+  }
+
+  .nav-menu ul li a.video-active:hover {
+    @apply text-[var(--secondary-color)];
+  }
+
+  .image-slider {
+    @apply relative w-screen h-screen overflow-hidden;
+  }
+
+  .slide {
+    @apply absolute top-0 left-0 w-full h-full opacity-0 transition-opacity duration-1000;
+  }
+
+  .slide.active {
+    @apply opacity-100;
+  }
+
+  .initial-image {
+    @apply w-full h-full object-cover object-center opacity-100 transition-opacity duration-1000;
+  }
+
+  .initial-image.fade-out {
+    @apply opacity-0;
+  }
+
+  .background-video {
+    @apply absolute top-0 left-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000;
+  }
+
+  .background-video.fade-in {
+    @apply opacity-100;
+  }
+
+  .ep-announcement {
+    @apply absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center text-[var(--white)] w-full px-5;
+  }
+
+  .ep-announcement h1 {
+    @apply text-4xl my-2;
+  }
+
+  .ep-announcement h4 {
+    @apply text-xl my-1 tracking-wider;
+  }
+
+  .ep-buttons {
+    @apply mt-10 flex gap-8 justify-center;
+  }
+
+  .ep-button {
+    @apply px-8 py-2 text-xl tracking-wider transition-all duration-300 border-2 border-black rounded-full bg-transparent text-black;
+  }
+
+  .ep-button:hover {
+    @apply bg-black text-[var(--white)];
+  }
+
+  .background-video.fade-in ~ .ep-announcement .ep-button {
+    @apply border-2 border-[var(--white)] text-black;
+  }
+
+  .background-video.fade-in ~ .ep-announcement .ep-button:hover {
+    @apply bg-[var(--white)] text-black;
+  }
+
+  .content-page {
+    @apply min-h-screen bg-[var(--white)] text-[var(--primary-color)];
+  }
+
+  .artwork-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10;
+  }
+
+  .artwork-item {
+    @apply flex flex-col items-center;
+  }
+
+  .artwork-item a {
+    @apply block w-full aspect-square overflow-hidden;
+  }
+
+  .artwork-item a:hover img {
+    @apply scale-110;
+  }
+
+  .artwork-item img {
+    @apply w-full h-full object-cover transition-transform duration-300;
+  }
+
+  .artwork-item h3 {
+    @apply mt-4 text-2xl;
   }
 }
 
-/* Mobile Navigation */
-@media (max-width: 991px) {
-  .nav-menu {
-    position: fixed;
-    z-index: -1;
-    top: 70px;
-    right: 0;
-    width: 100%;
-    height: auto;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    transition: 0.3s ease-in-out;
-    transform: translateY(-100%);
-    transform-origin: top;
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .nav-menu.active {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .nav-menu ul {
+    @apply gap-16;
   }
 }
 
-.nav-menu ul {
-  list-style: none;
+@media (max-width: 992px) {
+  .nav-menu ul {
+    @apply gap-10;
+  }
 }
 
-.nav-menu ul li {
-  margin: 15px 0;
-}
-
-.nav-menu ul li a {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-size: 1.3rem;
-  transition: 0.3s;
-}
-
-.nav-menu ul li a:hover {
-  color: var(--secondary-color);
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
-}
-
-a {
-  color: rgb(var(--foreground-rgb));
-  text-decoration: none;
-}
-
-/* Import Font Awesome */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
-
-/* Custom styles */
-.font-fixture {
-  font-family: 'Fixture', sans-serif;
-}
-
-/* Smooth transitions */
-.transition-opacity {
-  transition-property: opacity;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 1000ms;
+@media (max-width: 768px) {
+  .nav-menu ul {
+    @apply gap-5;
+  }
+  
+  .nav-menu ul li a {
+    @apply text-xl;
+  }
 }
