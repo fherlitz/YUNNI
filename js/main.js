@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navMenu = document.querySelector('.nav-menu');
     const navLinksMobile = document.querySelectorAll('.nav-menu a');
+    const mobileCurvedLogo = document.querySelector('.mobile-curved-logo');
 
     if (mobileMenuBtn && navMenu) {
         function toggleMenu() {
@@ -152,6 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleMenu();
             }
         });
+
+        // Close menu when clicking the mobile curved logo
+        if (mobileCurvedLogo) {
+            mobileCurvedLogo.addEventListener('click', function() {
+                navMenu.classList.remove('active');
+                mobileMenuBtn.classList.remove('active');
+            });
+        }
     }
 
     // Artwork hover effect
