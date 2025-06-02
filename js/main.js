@@ -194,10 +194,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to reset colors
     function resetColors() {
-        currentColor = 'var(--white)';
+        currentColor = 'transparent';
         fullscreenBg.style.backgroundColor = currentColor;
         if (releasesHeading) {
-            releasesHeading.style.backgroundColor = currentColor;
+            releasesHeading.style.backgroundColor = 'var(--white)';
         }
     }
     
