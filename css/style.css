@@ -1073,12 +1073,12 @@ html {
 .mobile-curved-logo {
     display: none;
     position: fixed;
-    top: -90px;
-    left: 30px;
-    transform: translateX(-20%) rotate(-25deg);
-    width: 600px;
-    height: auto;
-    z-index: 1001;
+    top: -370px;
+    left: -370px;
+    z-index: 1000;
+    width: 800px;
+    height: 800px;
+    transition: transform 0.1s linear;
 }
 
 .mobile-curved-logo a {
@@ -1089,12 +1089,29 @@ html {
 
 .mobile-curved-logo img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.1s linear;
 }
 
 @media (max-width: 767px) {
     .mobile-curved-logo {
         display: block;
+    }
+    
+    .mobile-curved-logo img {
+        animation: rotateOnScroll linear forwards;
+        animation-timeline: scroll();
+        animation-range: 0 100%;
+    }
+}
+
+@keyframes rotateOnScroll {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg);
     }
 }
 
