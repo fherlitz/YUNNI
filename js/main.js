@@ -269,4 +269,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 100); // Debounce scroll events
     });
+
+    // Video section functionality
+    const videoTitles = document.querySelectorAll('.video-title');
+    const currentVideo = document.getElementById('current-video');
+    
+    videoTitles.forEach(title => {
+        title.addEventListener('click', function() {
+            // Remove active class from all titles
+            videoTitles.forEach(t => t.classList.remove('active'));
+            
+            // Add active class to clicked title
+            this.classList.add('active');
+            
+            // Update video source
+            const videoId = this.getAttribute('data-video');
+            currentVideo.src = `https://www.youtube-nocookie.com/embed/${videoId}?si=dYI71TzB_0YHh9X7`;
+        });
+    });
 }); 
