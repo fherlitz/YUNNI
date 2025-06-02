@@ -657,7 +657,7 @@ html {
     width: 100%;
     aspect-ratio: 1;
     overflow: hidden;
-    transition: transform 0.3s ease;
+    transition: transform 1s ease !important;
     display: block;
     background: var(--white);
     position: relative;
@@ -665,7 +665,7 @@ html {
 }
 
 .artwork-item a:hover {
-    transform: scale(1.02);
+    transform: scale(1.1) !important;
 }
 
 .artwork-item img {
