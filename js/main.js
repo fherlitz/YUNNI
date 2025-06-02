@@ -8,51 +8,56 @@ document.addEventListener('DOMContentLoaded', () => {
     const popup = document.querySelector('.popup-notification');
     let isVideoPlaying = false;
 
-    // Start video after 3 seconds
-    setTimeout(() => {
-        initialImage.classList.add('fade-out');
-        backgroundVideo.classList.add('fade-in');
-        backgroundVideo.play();
-        isVideoPlaying = true;
-        
-        // Change text color to white
-        epAnnouncement.style.color = 'white';
-        epAnnouncement.querySelectorAll('h1, h4').forEach(element => {
-            element.style.color = 'white';
-        });
+    // Only run video transition if we're on the home page
+    if (initialImage && backgroundVideo && epAnnouncement) {
+        // Start video after 3 seconds
+        setTimeout(() => {
+            initialImage.classList.add('fade-out');
+            backgroundVideo.classList.add('fade-in');
+            backgroundVideo.play();
+            isVideoPlaying = true;
+            
+            // Change text color to white
+            epAnnouncement.style.color = 'white';
+            epAnnouncement.querySelectorAll('h1, h4').forEach(element => {
+                element.style.color = 'white';
+            });
 
-        // Change navigation color to white
-        navLinks.forEach(link => {
-            link.classList.add('video-active');
-        });
-        
-        // Change mobile menu spans to white
-        mobileMenuSpans.forEach(span => {
-            span.classList.add('video-active');
-        });
-    }, 3000);
-
-    // Update nav colors on scroll
-    window.addEventListener('scroll', () => {
-        const homeSection = document.querySelector('#home');
-        const rect = homeSection.getBoundingClientRect();
-        
-        if (rect.bottom > 0 && isVideoPlaying) {
+            // Change navigation color to white
             navLinks.forEach(link => {
                 link.classList.add('video-active');
             });
+            
+            // Change mobile menu spans to white
             mobileMenuSpans.forEach(span => {
                 span.classList.add('video-active');
             });
-        } else {
-            navLinks.forEach(link => {
-                link.classList.remove('video-active');
-            });
-            mobileMenuSpans.forEach(span => {
-                span.classList.remove('video-active');
-            });
-        }
-    });
+        }, 3000);
+
+        // Update nav colors on scroll
+        window.addEventListener('scroll', () => {
+            const homeSection = document.querySelector('#home');
+            if (homeSection) {
+                const rect = homeSection.getBoundingClientRect();
+                
+                if (rect.bottom > 0 && isVideoPlaying) {
+                    navLinks.forEach(link => {
+                        link.classList.add('video-active');
+                    });
+                    mobileMenuSpans.forEach(span => {
+                        span.classList.add('video-active');
+                    });
+                } else {
+                    navLinks.forEach(link => {
+                        link.classList.remove('video-active');
+                    });
+                    mobileMenuSpans.forEach(span => {
+                        span.classList.remove('video-active');
+                    });
+                }
+            }
+        });
+    }
 
     // Popup functionality
     const newsletterPopup = document.querySelector('.newsletter-popup');
@@ -124,26 +129,135 @@ document.addEventListener('DOMContentLoaded', () => {
     const navMenu = document.querySelector('.nav-menu');
     const navLinksMobile = document.querySelectorAll('.nav-menu a');
 
-    function toggleMenu() {
-        navMenu.classList.toggle('active');
-        mobileMenuBtn.classList.toggle('active');
-    }
+    if (mobileMenuBtn && navMenu) {
+        function toggleMenu() {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        }
 
-    mobileMenuBtn.addEventListener('click', () => {
-        toggleMenu();
-    });
-
-    // Close mobile menu when clicking a link
-    navLinksMobile.forEach(link => {
-        link.addEventListener('click', () => {
+        mobileMenuBtn.addEventListener('click', () => {
             toggleMenu();
         });
+
+        // Close mobile menu when clicking a link
+        navLinksMobile.forEach(link => {
+            link.addEventListener('click', () => {
+                toggleMenu();
+            });
+        });
+
+        // Close overlay when clicking outside the menu links
+        navMenu.addEventListener('click', function(e) {
+            if (e.target === this) { // Clicked directly on the menu background, not on the links
+                toggleMenu();
+            }
+        });
+    }
+
+    // Artwork hover effect
+    const artworkItems = document.querySelectorAll('.artwork-item');
+    const fullscreenBg = document.createElement('div');
+    fullscreenBg.className = 'fullscreen-bg';
+    document.body.appendChild(fullscreenBg);
+    const releasesHeading = document.querySelector('#releases h2');
+    let currentColor = 'var(--white)';
+    
+    // Function to check if element is in center of viewport
+    function isInCenter(element) {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const elementCenter = rect.top + rect.height / 2;
+        const viewportCenter = windowHeight * 0.5;
+        const threshold = 150;
+        
+        return Math.abs(elementCenter - viewportCenter) < threshold;
+    }
+
+    // Function to handle color change
+    function handleColorChange(item, img) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        const pixel = ctx.getImageData(img.width - 1, 0, 1, 1).data;
+        const color = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+        
+        if (color !== currentColor) {
+            currentColor = color;
+            fullscreenBg.style.backgroundColor = color;
+            if (releasesHeading) {
+                releasesHeading.style.backgroundColor = color;
+            }
+        }
+    }
+
+    // Function to reset colors
+    function resetColors() {
+        currentColor = 'var(--white)';
+        fullscreenBg.style.backgroundColor = currentColor;
+        if (releasesHeading) {
+            releasesHeading.style.backgroundColor = currentColor;
+        }
+    }
+    
+    artworkItems.forEach(item => {
+        const img = item.querySelector('img');
+        
+        if (img) {
+            // Handle hover for desktop
+            img.addEventListener('load', () => {
+                item.addEventListener('mouseenter', () => {
+                    handleColorChange(item, img);
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    resetColors();
+                });
+            });
+
+            // If image is already loaded
+            if (img.complete) {
+                item.addEventListener('mouseenter', () => {
+                    handleColorChange(item, img);
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    resetColors();
+                });
+            }
+        }
     });
 
-    // Close overlay when clicking outside the menu links
-    navMenu.addEventListener('click', function(e) {
-        if (e.target === this) { // Clicked directly on the menu background, not on the links
-            toggleMenu();
-        }
+    // Handle scroll for mobile
+    let isMobile = window.innerWidth <= 767;
+    let scrollTimeout;
+
+    window.addEventListener('resize', () => {
+        isMobile = window.innerWidth <= 767;
+    });
+
+    window.addEventListener('scroll', () => {
+        if (!isMobile) return;
+
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            let centeredItem = null;
+            
+            artworkItems.forEach(item => {
+                if (isInCenter(item)) {
+                    centeredItem = item;
+                }
+            });
+
+            if (centeredItem) {
+                const img = centeredItem.querySelector('img');
+                if (img && img.complete) {
+                    handleColorChange(centeredItem, img);
+                }
+            } else {
+                resetColors();
+            }
+        }, 100); // Debounce scroll events
     });
 }); 
