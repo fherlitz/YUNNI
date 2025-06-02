@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const backgroundVideo = document.querySelector('.background-video');
     const epAnnouncement = document.querySelector('.ep-announcement');
     const navLinks = document.querySelectorAll('.nav-menu ul li a');
+    const mobileMenuSpans = document.querySelectorAll('.mobile-menu-btn span');
     const popup = document.querySelector('.popup-notification');
     let isVideoPlaying = false;
 
@@ -24,6 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
         navLinks.forEach(link => {
             link.classList.add('video-active');
         });
+        
+        // Change mobile menu spans to white
+        mobileMenuSpans.forEach(span => {
+            span.classList.add('video-active');
+        });
     }, 3000);
 
     // Update nav colors on scroll
@@ -35,9 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
             navLinks.forEach(link => {
                 link.classList.add('video-active');
             });
+            mobileMenuSpans.forEach(span => {
+                span.classList.add('video-active');
+            });
         } else {
             navLinks.forEach(link => {
                 link.classList.remove('video-active');
+            });
+            mobileMenuSpans.forEach(span => {
+                span.classList.remove('video-active');
             });
         }
     });
@@ -106,4 +118,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Mobile Menu Functionality
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinksMobile = document.querySelectorAll('.nav-menu a');
+
+    function toggleMenu() {
+        navMenu.classList.toggle('active');
+        mobileMenuBtn.classList.toggle('active');
+    }
+
+    mobileMenuBtn.addEventListener('click', () => {
+        toggleMenu();
+    });
+
+    // Close mobile menu when clicking a link
+    navLinksMobile.forEach(link => {
+        link.addEventListener('click', () => {
+            toggleMenu();
+        });
+    });
+
+    // Close overlay when clicking outside the menu links
+    navMenu.addEventListener('click', function(e) {
+        if (e.target === this) { // Clicked directly on the menu background, not on the links
+            toggleMenu();
+        }
+    });
 }); 
