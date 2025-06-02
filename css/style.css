@@ -1077,11 +1077,11 @@ html {
 .mobile-curved-logo {
     display: none;
     position: fixed;
-    top: -370px;
-    left: -370px;
+    top: -180px;
+    left: -180px;
     z-index: 1000;
-    width: 800px;
-    height: 800px;
+    width: 370px;
+    height: 370px;
     transition: transform 0.1s linear;
 }
 
