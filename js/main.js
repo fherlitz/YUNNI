@@ -306,29 +306,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Logo rotation on scroll
-    const curvedLogo = document.querySelector('.mobile-curved-logo');
+    // Mobile curved logo rotation
+    const mobileCurvedLogoImg = document.querySelector('.mobile-curved-logo img');
     let lastScrollY = window.scrollY;
     let rotation = 0;
 
     function updateLogoRotation() {
-        const currentScrollY = window.scrollY;
-        const scrollDiff = currentScrollY - lastScrollY;
-        
-        // Adjust rotation based on scroll direction and speed
-        rotation += scrollDiff * 0.5;
-        
-        // Apply rotation to the logo
-        if (curvedLogo) {
-            curvedLogo.style.transform = `rotate(${rotation}deg)`;
+        if (window.innerWidth <= 767 && mobileCurvedLogoImg) {
+            const currentScrollY = window.scrollY;
+            const scrollDelta = currentScrollY - lastScrollY;
+            
+            // Update rotation based on scroll direction and speed
+            rotation -= scrollDelta * 0.2;
+            
+            // Apply the rotation
+            mobileCurvedLogoImg.style.transform = `rotate(${rotation}deg)`;
+            
+            lastScrollY = currentScrollY;
         }
-        
-        lastScrollY = currentScrollY;
     }
 
-    // Use both scroll and touch events for better mobile support
-    window.addEventListener('scroll', updateLogoRotation, { passive: true });
-    window.addEventListener('touchmove', updateLogoRotation, { passive: true });
+    // Throttle the scroll event for better performance
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                updateLogoRotation();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
 
     // Image slider functionality
     const slider = document.querySelector('.image-slider');

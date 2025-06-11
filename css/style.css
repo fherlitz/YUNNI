@@ -18,6 +18,12 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
 body {
     font-family: 'Futura Bold', sans-serif;
     font-weight: 900;
@@ -25,6 +31,8 @@ body {
     background-color: var(--white);
     color: var(--white);
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 p, a, h1, h2, h3, h4, h5, h6, li, ul, ol {
@@ -1226,6 +1234,7 @@ html {
     width: 370px;
     height: 370px;
     transition: transform 0.1s linear;
+    will-change: transform;
 }
 
 .mobile-curved-logo a {
@@ -1239,6 +1248,7 @@ html {
     height: 100%;
     object-fit: contain;
     transition: transform 0.1s linear;
+    will-change: transform;
 }
 
 @media (max-width: 767px) {
@@ -1247,9 +1257,7 @@ html {
     }
     
     .mobile-curved-logo img {
-        animation: rotateOnScroll linear forwards;
-        animation-timeline: scroll();
-        animation-range: 0 100%;
+        animation: none;
     }
 }
 
