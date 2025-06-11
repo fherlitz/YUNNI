@@ -35,7 +35,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-p, a, h1, h2, h3, h4, h5, h6, li, ul, ol {
+p, a, h1, h2, h3, h4, li, ul {
     font-family: 'Futura Bold', sans-serif;
     font-weight: 900;
     color: var(--primary-color);
@@ -578,10 +578,6 @@ footer {
         justify-content: center;
         margin-bottom: 10px;
     }
-    
-    footer a[href="/imprint-privacy"] {
-        display: block;
-    }
 }
 
 footer a {
@@ -610,12 +606,6 @@ footer a:hover {
 
 .social-icon:hover {
     color: var(--secondary-color);
-}
-
-footer a[href="imprint-privacy.html"] {
-    font-size: 0.9rem;
-    display: inline-block;
-    margin-top: 10px;
 }
 
 /* Content Page Styles */
@@ -670,29 +660,6 @@ footer a[href="imprint-privacy.html"] {
     }
 }
 
-.about-text {
-    max-width: 800px;
-    margin: 0 auto 60px;
-}
-
-.about-text p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 20px;
-    text-align: justify;
-}
-
-@media (max-width: 768px) {
-    .about-text {
-        padding: 0 20px;
-    }
-    
-    .about-text p {
-        font-size: 1rem;
-        text-align: left;
-    }
-}
-
 #inquires {
     min-height: 100vh;
     display: flex;
@@ -729,17 +696,6 @@ footer a[href="imprint-privacy.html"] {
     max-width: 800px;
     margin: 0 auto;
     align-items: center;
-}
-
-#inquires .contact-info {
-    background: rgba(0, 0, 0, 0.8);
-    padding: 30px;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    width: 100%;
-    max-width: 500px;
-    text-align: center;
 }
 
 #inquires h3 {
@@ -779,10 +735,6 @@ footer a[href="imprint-privacy.html"] {
     
     #inquires p {
         font-size: 1rem;
-    }
-    
-    #inquires .contact-info {
-        max-width: 100%;
     }
 }
 
@@ -830,49 +782,6 @@ section#newsletter .newsletter-form {
     margin: 0 auto;
 }
 
-section#newsletter .form-control {
-    background: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 15px 25px;
-    margin-bottom: 20px;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    border-radius: 30px;
-}
-
-section#newsletter .form-control::placeholder {
-    color: var(--primary-color);
-    opacity: 0.7;
-}
-
-section#newsletter .form-control:focus {
-    background: transparent;
-    border-color: var(--secondary-color);
-    box-shadow: none;
-    color: var(--primary-color);
-}
-
-section#newsletter .btn-primary {
-    background: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 15px 40px;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    border-radius: 30px;
-}
-
-section#newsletter .btn-primary:hover {
-    background: var(--primary-color);
-    color: var(--background-color);
-    transform: translateY(-2px);
-}
-
 @media (max-width: 768px) {
     section#newsletter {
         padding: 40px 20px;
@@ -884,16 +793,6 @@ section#newsletter .btn-primary:hover {
     
     section#newsletter p {
         font-size: 1rem;
-    }
-    
-    section#newsletter .form-control {
-        font-size: 1rem;
-        padding: 12px 20px;
-    }
-    
-    section#newsletter .btn-primary {
-        font-size: 1rem;
-        padding: 12px 30px;
     }
 }
 
@@ -1069,19 +968,6 @@ html {
     color: rgba(0, 0, 0, 0.3);
 }
 
-.artwork-carousel {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-}
-
-.artwork-track {
-    display: flex;
-    transition: transform 0.3s ease;
-    gap: 20px;
-    padding: 20px 0;
-}
-
 .artwork-item {
     flex: 0 0 auto;
     display: flex;
@@ -1117,15 +1003,6 @@ html {
 
 /* Desktop Styles */
 @media (min-width: 992px) {
-    .artwork-carousel {
-        overflow: visible;
-    }
-
-    .artwork-track {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 40px;
-    }
 
     .artwork-item {
         width: 100%;
@@ -1134,22 +1011,6 @@ html {
 
 /* Mobile Styles */
 @media (max-width: 991px) {
-    .artwork-carousel {
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE and Edge */
-    }
-
-    .artwork-carousel::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, Opera */
-    }
-
-    .artwork-track {
-        scroll-snap-type: x mandatory;
-        padding: 20px;
-        margin: 0 -20px;
-    }
 
     .artwork-item {
         scroll-snap-align: center;
@@ -1383,14 +1244,5 @@ body.imprint-privacy .container.mt-5.pt-5 {
     .video-title {
         font-size: 1.2rem;
         padding: 10px 0;
-    }
-}
-
-@media (max-width: 768px) {
-    .releases-description {
-        font-size: 1rem;
-        padding: 0;
-        text-align: right;
-        margin: 40px 20px 40px auto;
     }
 }
