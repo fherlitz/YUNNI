@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const scrollDelta = currentScrollY - lastScrollY;
             
             // Update rotation based on scroll direction and speed
-            rotation -= scrollDelta * 0.2;
+            rotation -= scrollDelta * 0.05;
             
             // Apply the rotation
             mobileCurvedLogoImg.style.transform = `rotate(${rotation}deg)`;
