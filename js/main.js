@@ -287,4 +287,62 @@ document.addEventListener('DOMContentLoaded', () => {
             currentVideo.src = `https://www.youtube-nocookie.com/embed/${videoId}?si=dYI71TzB_0YHh9X7`;
         });
     });
+
+    // Smooth scroll for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+                // Close mobile menu if open
+                if (mobileMenuBtn && navMenu) {
+                    mobileMenuBtn.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            }
+        });
+    });
+
+    // Logo rotation on scroll
+    const curvedLogo = document.querySelector('.mobile-curved-logo');
+    let lastScrollY = window.scrollY;
+    let rotation = 0;
+
+    function updateLogoRotation() {
+        const currentScrollY = window.scrollY;
+        const scrollDiff = currentScrollY - lastScrollY;
+        
+        // Adjust rotation based on scroll direction and speed
+        rotation += scrollDiff * 0.5;
+        
+        // Apply rotation to the logo
+        if (curvedLogo) {
+            curvedLogo.style.transform = `rotate(${rotation}deg)`;
+        }
+        
+        lastScrollY = currentScrollY;
+    }
+
+    // Use both scroll and touch events for better mobile support
+    window.addEventListener('scroll', updateLogoRotation, { passive: true });
+    window.addEventListener('touchmove', updateLogoRotation, { passive: true });
+
+    // Image slider functionality
+    const slider = document.querySelector('.image-slider');
+    const video = document.querySelector('.background-video');
+    
+    if (slider && video) {
+        // Play video when it's loaded
+        video.addEventListener('loadeddata', function() {
+            video.play();
+        });
+        
+        // Handle video errors
+        video.addEventListener('error', function() {
+            console.error('Error loading video');
+        });
+    }
 }); 
