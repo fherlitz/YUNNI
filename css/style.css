@@ -957,15 +957,13 @@ html {
 }
 
 .tour-button.disabled {
-    opacity: 0.5;
     cursor: not-allowed;
-    border-color: rgba(0, 0, 0, 0.3);
-    color: rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .tour-button.disabled:hover {
-    background: transparent;
-    color: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .artwork-item {
