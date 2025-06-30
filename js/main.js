@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Only run video transition if we're on the home page
     if (initialImage && backgroundVideo && epAnnouncement) {
-        // Start video after 3 seconds
-        setTimeout(() => {
+        // Helper that performs the actual transition
+        function startVideoTransition() {
             initialImage.classList.add('fade-out');
             backgroundVideo.classList.add('fade-in');
             backgroundVideo.play();
@@ -19,20 +19,28 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Change text color to white
             epAnnouncement.style.color = 'white';
-            epAnnouncement.querySelectorAll('h1, h4').forEach(element => {
-                element.style.color = 'white';
-            });
+            epAnnouncement.querySelectorAll('h1, h4').forEach(el => el.style.color = 'white');
 
             // Change navigation color to white
-            navLinks.forEach(link => {
-                link.classList.add('video-active');
-            });
+            navLinks.forEach(link => link.classList.add('video-active'));
             
             // Change mobile menu spans to white
-            mobileMenuSpans.forEach(span => {
-                span.classList.add('video-active');
-            });
-        }, 3000);
+            mobileMenuSpans.forEach(span => span.classList.add('video-active'));
+        }
+
+        // Start the 3-second timer only once the page is actually visible
+        function beginWhenVisible() {
+            if (document.visibilityState === 'visible') {
+                setTimeout(startVideoTransition, 3000);
+                document.removeEventListener('visibilitychange', beginWhenVisible);
+                window.removeEventListener('pageshow', beginWhenVisible);
+            }
+        }
+
+        // Handle regular loads, prerender, and bfcache restores
+        beginWhenVisible(); // In case we're already visible
+        document.addEventListener('visibilitychange', beginWhenVisible);
+        window.addEventListener('pageshow', beginWhenVisible);
 
         // Update nav colors on scroll
         window.addEventListener('scroll', () => {
