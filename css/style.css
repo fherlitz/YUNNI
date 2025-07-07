@@ -628,11 +628,21 @@ footer a:hover {
     flex-direction: column;
     justify-content: space-between;
     padding: 0px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Separate blurred background layer */
+#inquires::before {
+    content: "";
+    position: absolute;
+    inset: 0;
     background-image: url('../assets/images/estudio.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    position: relative;
+    filter: blur(1.5px);
+    z-index: 0;
 }
 
 #inquires .container {
