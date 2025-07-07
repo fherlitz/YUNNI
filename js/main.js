@@ -176,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullscreenBg = document.createElement('div');
     fullscreenBg.className = 'fullscreen-bg';
     document.body.appendChild(fullscreenBg);
-    const releasesHeading = document.querySelector('#releases h2');
     let currentColor = 'var(--white)';
     
     // Function to check if element is in center of viewport
@@ -203,9 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (color !== currentColor) {
             currentColor = color;
             fullscreenBg.style.backgroundColor = color;
-            if (releasesHeading) {
-                releasesHeading.style.backgroundColor = color;
-            }
         }
     }
 
@@ -213,9 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetColors() {
         currentColor = 'transparent';
         fullscreenBg.style.backgroundColor = currentColor;
-        if (releasesHeading) {
-            releasesHeading.style.backgroundColor = 'var(--white)';
-        }
     }
     
     artworkItems.forEach(item => {
