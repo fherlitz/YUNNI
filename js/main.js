@@ -190,20 +190,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to handle color change
-    function handleColorChange(item, img) {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        const pixel = ctx.getImageData(img.width - 1, 0, 1, 1).data;
-        const color = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
-        
-        if (color !== currentColor) {
-            currentColor = color;
-            fullscreenBg.style.backgroundColor = color;
-        }
+    function handleColorChange(item, img, color) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+    const pixel = ctx.getImageData(img.width - 11, 10, 1, 1).data;
+    
+    // Set color based on image name
+    if (img.src.includes('Artwork_Tommy_Gun.jpeg')) {
+        color = 'rgb(240, 211, 114)'; // Gold color
+    } else {
+        color = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
     }
+
+    if (color !== currentColor) {
+        currentColor = color;
+        fullscreenBg.style.backgroundColor = color;
+    }
+}
 
     // Function to reset colors
     function resetColors() {
