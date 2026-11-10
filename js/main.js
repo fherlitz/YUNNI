@@ -1,363 +1,285 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Image to video transition
-    const initialImage = document.querySelector('.initial-image');
-    const backgroundVideo = document.querySelector('.background-video');
-    const epAnnouncement = document.querySelector('.ep-announcement');
-    const navLinks = document.querySelectorAll('.nav-menu ul li a');
-    const mobileMenuSpans = document.querySelectorAll('.mobile-menu-btn span');
-    const popup = document.querySelector('.popup-notification');
-    let isVideoPlaying = false;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    // Only run video transition if we're on the home page
-    if (initialImage && backgroundVideo && epAnnouncement) {
-        // Helper that performs the actual transition
-        function startVideoTransition() {
-            initialImage.classList.add('fade-out');
-            backgroundVideo.classList.add('fade-in');
-            backgroundVideo.play();
-            isVideoPlaying = true;
-            
-            // Change text color to white
-            epAnnouncement.style.color = 'white';
-            epAnnouncement.querySelectorAll('h1, h4').forEach(el => el.style.color = 'white');
+    const recordJourney = document.querySelector('.record-journey');
+    const recordSlides = recordJourney ? [...recordJourney.querySelectorAll('[data-record]')] : [];
 
-            // Change navigation color to white
-            navLinks.forEach(link => link.classList.add('video-active'));
-            
-            // Change mobile menu spans to white
-            mobileMenuSpans.forEach(span => span.classList.add('video-active'));
-        }
+    if (recordJourney && recordSlides.length > 1 && !prefersReducedMotion.matches) {
+        recordJourney.style.setProperty('--record-count', recordSlides.length);
+        recordJourney.classList.add('is-enhanced');
 
-        // Start the 3-second timer only once the page is actually visible
-        function beginWhenVisible() {
-            if (document.visibilityState === 'visible') {
-                setTimeout(startVideoTransition, 3000);
-                document.removeEventListener('visibilitychange', beginWhenVisible);
-                window.removeEventListener('pageshow', beginWhenVisible);
+        let recordFrameRequested = false;
+        let recordAnimationRunning = false;
+        let wheelDelta = 0;
+        let wheelDirection = 0;
+        let touchStartY = null;
+        let touchGestureConsumed = false;
+
+        function getRecordProgress() {
+            const scrollDistance = recordJourney.offsetHeight - window.innerHeight;
+            if (scrollDistance <= 0) {
+                return 0;
             }
+
+            const lastIndex = recordSlides.length - 1;
+            const rawProgress = Math.min(lastIndex, Math.max(0, -recordJourney.getBoundingClientRect().top / scrollDistance * lastIndex));
+            if (rawProgress >= lastIndex) {
+                return lastIndex;
+            }
+
+            const cycleIndex = Math.floor(rawProgress);
+            const cycleProgress = rawProgress - cycleIndex;
+            const hold = 0.35;
+            const transitionProgress = Math.min(1, Math.max(0, (cycleProgress - hold) / (1 - 2 * hold)));
+            return cycleIndex + transitionProgress;
         }
 
-        // Handle regular loads, prerender, and bfcache restores
-        beginWhenVisible(); // In case we're already visible
-        document.addEventListener('visibilitychange', beginWhenVisible);
-        window.addEventListener('pageshow', beginWhenVisible);
+        function renderRecordJourney(progress) {
+            const activeIndex = Math.round(progress);
+            recordSlides.forEach((slide, index) => {
+                const offset = progress - index;
+                const distance = Math.min(1, Math.abs(offset));
+                const opacity = Math.max(0, 1 - Math.abs(offset));
+                const x = Math.max(-120, Math.min(120, offset * 120));
+                const rotation = x / 120 * 270;
+                const copyClip = offset <= 0 ? 0 : Math.min(100, Math.max(0, (offset - 0.22) / 0.78 * 100));
+                const copyOpacity = offset <= 0
+                    ? opacity
+                    : Math.min(opacity, Math.max(0, (1 - offset) / 0.28));
+                const copy = slide.querySelector('.record-copy');
+                const vinyl = slide.querySelector('.vinyl-link');
 
-        // Update nav colors on scroll
-        window.addEventListener('scroll', () => {
-            const homeSection = document.querySelector('#home');
-            if (homeSection) {
-                const rect = homeSection.getBoundingClientRect();
-                
-                if (rect.bottom > 0 && isVideoPlaying) {
-                    navLinks.forEach(link => {
-                        link.classList.add('video-active');
-                    });
-                    mobileMenuSpans.forEach(span => {
-                        span.classList.add('video-active');
-                    });
-                } else {
-                    navLinks.forEach(link => {
-                        link.classList.remove('video-active');
-                    });
-                    mobileMenuSpans.forEach(span => {
-                        span.classList.remove('video-active');
-                    });
+                slide.style.opacity = opacity;
+                slide.style.zIndex = offset >= 0 ? '2' : '1';
+                slide.style.pointerEvents = index === activeIndex ? 'auto' : 'none';
+                slide.inert = index !== activeIndex;
+                slide.setAttribute('aria-hidden', String(index !== activeIndex));
+                slide.style.setProperty('--record-scale', String(1 - distance * 0.1));
+                if (copy) {
+                    copy.style.setProperty('--copy-clip', `${copyClip}%`);
+                    copy.style.setProperty('--copy-opacity', String(copyOpacity));
                 }
-            }
-        });
-    }
-
-    // Popup functionality
-    const newsletterPopup = document.querySelector('.newsletter-popup');
-    const overlay = document.querySelector('.overlay');
-    const closePopup = document.querySelector('.close-popup');
-    const closeNewsletter = document.querySelector('.close-newsletter');
-    const newsletterForm = document.querySelector('.newsletter-form');
-
-    // Show popup after 5 seconds
-    setTimeout(() => {
-        if (popup) {
-            popup.classList.add('show');
-        }
-    }, 5000);
-
-    // Handle popup click
-    if (popup) {
-        popup.addEventListener('click', () => {
-            popup.classList.remove('show');
-            if (newsletterPopup) {
-                newsletterPopup.classList.add('show');
-            }
-            if (overlay) {
-                overlay.classList.add('show');
-            }
-        });
-    }
-
-    // Close popup
-    if (closePopup) {
-        closePopup.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (popup) {
-                popup.classList.remove('show');
-            }
-        });
-    }
-
-    // Close newsletter
-    if (closeNewsletter) {
-        closeNewsletter.addEventListener('click', () => {
-            if (newsletterPopup) {
-                newsletterPopup.classList.remove('show');
-            }
-            if (overlay) {
-                overlay.classList.remove('show');
-            }
-        });
-    }
-
-    // Handle newsletter form submission
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = e.target.querySelector('input[type="email"]').value;
-            // Here you would typically send the email to your backend
-            alert('Thanks for subscribing!');
-            if (newsletterPopup) {
-                newsletterPopup.classList.remove('show');
-            }
-            if (overlay) {
-                overlay.classList.remove('show');
-            }
-        });
-    }
-
-    // Mobile Menu Functionality
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navMenu = document.querySelector('.nav-menu');
-    const navLinksMobile = document.querySelectorAll('.nav-menu a');
-    const mobileCurvedLogo = document.querySelector('.mobile-curved-logo');
-
-    if (mobileMenuBtn && navMenu) {
-        function toggleMenu() {
-            navMenu.classList.toggle('active');
-            mobileMenuBtn.classList.toggle('active');
-        }
-
-        mobileMenuBtn.addEventListener('click', () => {
-            toggleMenu();
-        });
-
-        // Close mobile menu when clicking a link
-        navLinksMobile.forEach(link => {
-            link.addEventListener('click', () => {
-                toggleMenu();
-            });
-        });
-
-        // Close overlay when clicking outside the menu links
-        navMenu.addEventListener('click', function(e) {
-            if (e.target === this) { // Clicked directly on the menu background, not on the links
-                toggleMenu();
-            }
-        });
-
-        // Close menu when clicking the mobile curved logo
-        if (mobileCurvedLogo) {
-            mobileCurvedLogo.addEventListener('click', function() {
-                navMenu.classList.remove('active');
-                mobileMenuBtn.classList.remove('active');
-            });
-        }
-    }
-
-    // Artwork hover effect
-    const artworkItems = document.querySelectorAll('.artwork-item');
-    const fullscreenBg = document.createElement('div');
-    fullscreenBg.className = 'fullscreen-bg';
-    document.body.appendChild(fullscreenBg);
-    let currentColor = 'var(--white)';
-    
-    // Function to check if element is in center of viewport
-    function isInCenter(element) {
-        const rect = element.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const elementCenter = rect.top + rect.height / 2;
-        const viewportCenter = windowHeight * 0.5;
-        const threshold = 150;
-        
-        return Math.abs(elementCenter - viewportCenter) < threshold;
-    }
-
-    // Function to handle color change
-    function handleColorChange(item, img, color) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
-    const pixel = ctx.getImageData(img.width - 11, 10, 1, 1).data;
-    
-    // Set color based on image name
-    if (img.src.includes('Artwork_Tommy_Gun.jpeg')) {
-        color = 'rgb(240, 211, 114)'; // Gold color
-    } else {
-        color = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
-    }
-
-    if (color !== currentColor) {
-        currentColor = color;
-        fullscreenBg.style.backgroundColor = color;
-    }
-}
-
-    // Function to reset colors
-    function resetColors() {
-        currentColor = 'transparent';
-        fullscreenBg.style.backgroundColor = currentColor;
-    }
-    
-    artworkItems.forEach(item => {
-        const img = item.querySelector('img');
-        
-        if (img) {
-            // Handle hover for desktop
-            img.addEventListener('load', () => {
-                item.addEventListener('mouseenter', () => {
-                    handleColorChange(item, img);
-                });
-                
-                item.addEventListener('mouseleave', () => {
-                    resetColors();
-                });
-            });
-
-            // If image is already loaded
-            if (img.complete) {
-                item.addEventListener('mouseenter', () => {
-                    handleColorChange(item, img);
-                });
-                
-                item.addEventListener('mouseleave', () => {
-                    resetColors();
-                });
-            }
-        }
-    });
-
-    // Handle scroll for mobile
-    let isMobile = window.innerWidth <= 767;
-    let scrollTimeout;
-
-    window.addEventListener('resize', () => {
-        isMobile = window.innerWidth <= 767;
-    });
-
-    window.addEventListener('scroll', () => {
-        if (!isMobile) return;
-
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-            let centeredItem = null;
-            
-            artworkItems.forEach(item => {
-                if (isInCenter(item)) {
-                    centeredItem = item;
+                if (vinyl) {
+                    vinyl.style.setProperty('--record-x', `${x}vw`);
+                    vinyl.style.setProperty('--record-spin', `${rotation}deg`);
                 }
             });
 
-            if (centeredItem) {
-                const img = centeredItem.querySelector('img');
-                if (img && img.complete) {
-                    handleColorChange(centeredItem, img);
-                }
-            } else {
-                resetColors();
+            const progressBar = recordJourney.querySelector('.record-progress');
+            progressBar?.style.setProperty('--record-progress', String(progress / (recordSlides.length - 1)));
+        }
+
+        function setRecordScrollPosition(progress) {
+            const scrollDistance = recordJourney.offsetHeight - window.innerHeight;
+            const journeyTop = recordJourney.getBoundingClientRect().top + window.scrollY;
+            const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+            document.documentElement.style.scrollBehavior = 'auto';
+            window.scrollTo(0, journeyTop + scrollDistance * progress / (recordSlides.length - 1));
+            document.documentElement.style.scrollBehavior = previousScrollBehavior;
+        }
+
+        function alignRecordToNearestStop(progress) {
+            const nearestStop = Math.min(recordSlides.length - 1, Math.max(0, Math.round(progress)));
+            renderRecordJourney(nearestStop);
+            setRecordScrollPosition(nearestStop);
+            wheelDelta = 0;
+            wheelDirection = 0;
+        }
+
+        function startRecordTransition(direction) {
+            if (recordAnimationRunning) {
+                return;
             }
-        }, 100); // Debounce scroll events
-    });
 
-    // Video section functionality
-    const videoTitles = document.querySelectorAll('.video-title');
-    const currentVideo = document.getElementById('current-video');
-    
-    videoTitles.forEach(title => {
-        title.addEventListener('click', function() {
-            // Remove active class from all titles
-            videoTitles.forEach(t => t.classList.remove('active'));
-            
-            // Add active class to clicked title
-            this.classList.add('active');
-            
-            // Update video source
-            const videoId = this.getAttribute('data-video');
-            currentVideo.src = `https://www.youtube-nocookie.com/embed/${videoId}?si=dYI71TzB_0YHh9X7`;
-        });
-    });
+            const startProgress = getRecordProgress();
+            const nearestStop = Math.round(startProgress);
+            const targetProgress = Math.min(
+                recordSlides.length - 1,
+                Math.max(
+                    0,
+                    Math.abs(startProgress - nearestStop) < 0.02
+                        ? nearestStop + direction
+                        : direction > 0
+                            ? Math.ceil(startProgress)
+                            : Math.floor(startProgress)
+                )
+            );
+            if (targetProgress === startProgress) {
+                return;
+            }
 
-    // Smooth scroll for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth'
+            recordAnimationRunning = true;
+            const startTime = performance.now();
+            const duration = 933;
+
+            function animateRecord(timestamp) {
+                const progress = Math.min(1, (timestamp - startTime) / duration);
+                const easedProgress = progress * progress * (3 - 2 * progress);
+                renderRecordJourney(startProgress + (targetProgress - startProgress) * easedProgress);
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(animateRecord);
+                    return;
+                }
+
+                renderRecordJourney(targetProgress);
+                setRecordScrollPosition(targetProgress);
+                recordAnimationRunning = false;
+            }
+
+            window.requestAnimationFrame(animateRecord);
+        }
+
+        function getJourneyScrollState() {
+            const scrollDistance = recordJourney.offsetHeight - window.innerHeight;
+            const journeyTop = recordJourney.getBoundingClientRect().top + window.scrollY;
+            const scrollY = window.scrollY;
+
+            return {
+                inRange: scrollY >= journeyTop - 1 && scrollY <= journeyTop + scrollDistance + 1,
+                progress: getRecordProgress()
+            };
+        }
+
+        recordJourney.addEventListener('wheel', (event) => {
+            const { inRange, progress } = getJourneyScrollState();
+            if (!inRange) {
+                return;
+            }
+
+            const direction = Math.sign(event.deltaY);
+            if (!direction) {
+                return;
+            }
+
+            const atFirstRecord = progress <= 0.01;
+            const atLastRecord = progress >= recordSlides.length - 1 - 0.01;
+            if ((direction < 0 && atFirstRecord) || (direction > 0 && atLastRecord)) {
+                wheelDelta = 0;
+                wheelDirection = 0;
+                return;
+            }
+            event.preventDefault();
+            event.preventDefault();
+            if (recordAnimationRunning) {
+                return;
+            }
+
+            const nearestStop = Math.round(progress);
+            if (Math.abs(progress - nearestStop) >= 0.02) {
+                alignRecordToNearestStop(progress);
+                return;
+            }
+
+            if (direction !== wheelDirection) {
+                wheelDelta = 0;
+                wheelDirection = direction;
+            }
+
+            const deltaMultiplier = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+                ? 16
+                : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+                    ? window.innerHeight
+                    : 1;
+            wheelDelta += Math.abs(event.deltaY * deltaMultiplier);
+            if (wheelDelta >= 240) {
+                wheelDelta = 0;
+                startRecordTransition(direction);
+            }
+        }, { passive: false });
+
+        recordJourney.addEventListener('touchstart', (event) => {
+            if (event.touches.length !== 1 || !getJourneyScrollState().inRange) {
+                touchStartY = null;
+                return;
+            }
+
+            touchStartY = event.touches[0].clientY;
+            touchGestureConsumed = false;
+        }, { passive: true });
+
+        recordJourney.addEventListener('touchmove', (event) => {
+            if (touchStartY === null || event.touches.length !== 1) {
+                return;
+            }
+
+            const displacement = touchStartY - event.touches[0].clientY;
+            if (Math.abs(displacement) < 6) {
+                return;
+            }
+
+            const direction = Math.sign(displacement);
+            const { progress } = getJourneyScrollState();
+            if ((direction < 0 && progress <= 0.01) || (direction > 0 && progress >= recordSlides.length - 1 - 0.01)) {
+                touchStartY = null;
+                return;
+            }
+
+            event.preventDefault();
+            if (touchGestureConsumed || recordAnimationRunning || Math.abs(displacement) < 45) {
+                return;
+            }
+
+            touchGestureConsumed = true;
+            const nearestStop = Math.round(progress);
+            if (Math.abs(progress - nearestStop) >= 0.02) {
+                alignRecordToNearestStop(progress);
+                return;
+            }
+
+            startRecordTransition(direction);
+        }, { passive: false });
+
+        recordJourney.addEventListener('touchend', () => {
+            touchStartY = null;
+        }, { passive: true });
+        recordJourney.addEventListener('touchcancel', () => {
+            touchStartY = null;
+        }, { passive: true });
+
+        function updateRecordJourney() {
+            recordFrameRequested = false;
+            if (!recordAnimationRunning) {
+                renderRecordJourney(getRecordProgress());
+            }
+        }
+
+        function requestRecordUpdate() {
+            if (!recordFrameRequested) {
+                window.requestAnimationFrame(updateRecordJourney);
+                recordFrameRequested = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestRecordUpdate, { passive: true });
+        window.addEventListener('resize', requestRecordUpdate);
+        updateRecordJourney();
+    }
+
+    const videoFrame = document.querySelector('#current-video');
+    const videoButtons = document.querySelectorAll('.video-title[data-video]');
+
+    if (videoFrame) {
+        videoButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const videoId = button.dataset.video;
+                if (!videoId) {
+                    return;
+                }
+
+                videoButtons.forEach((item) => {
+                    const isActive = item === button;
+                    item.classList.toggle('active', isActive);
+                    item.setAttribute('aria-pressed', String(isActive));
                 });
-                // Close mobile menu if open
-                if (mobileMenuBtn && navMenu) {
-                    mobileMenuBtn.classList.remove('active');
-                    navMenu.classList.remove('active');
-                }
-            }
-        });
-    });
 
-    // Mobile curved logo rotation
-    const mobileCurvedLogoImg = document.querySelector('.mobile-curved-logo img');
-    let lastScrollY = window.scrollY;
-    let rotation = 0;
-
-    function updateLogoRotation() {
-        if (window.innerWidth <= 767 && mobileCurvedLogoImg) {
-            const currentScrollY = window.scrollY;
-            const scrollDelta = currentScrollY - lastScrollY;
-            
-            // Update rotation based on scroll direction and speed
-            rotation -= scrollDelta * 0.01;
-            
-            // Apply the rotation
-            mobileCurvedLogoImg.style.transform = `rotate(${rotation}deg)`;
-            
-            lastScrollY = currentScrollY;
-        }
-    }
-
-    // Throttle the scroll event for better performance
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                updateLogoRotation();
-                ticking = false;
+                videoFrame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?rel=0`;
+                videoFrame.title = button.dataset.title || 'YUNNI video';
             });
-            ticking = true;
-        }
-    });
-
-    // Image slider functionality
-    const slider = document.querySelector('.image-slider');
-    const video = document.querySelector('.background-video');
-    
-    if (slider && video) {
-        // Play video when it's loaded
-        video.addEventListener('loadeddata', function() {
-            video.play();
         });
-        
-        // Handle video errors
-        video.addEventListener('error', function() {
-            console.error('Error loading video');
+
+        videoButtons.forEach((button) => {
+            button.setAttribute('aria-pressed', String(button.classList.contains('active')));
         });
     }
-}); 
+});
