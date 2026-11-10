@@ -1223,7 +1223,19 @@ body::before,
     color: var(--accent);
 }
 
-.nav-menu a span {
+.external-arrow {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.35;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: -0.08em;
+}
+
+.nav-menu a .external-arrow {
     color: var(--accent);
 }
 
@@ -1416,7 +1428,7 @@ body::before,
     text-decoration: none;
 }
 
-.record-link span {
+.record-link .external-arrow {
     color: var(--accent);
 }
 
@@ -1465,6 +1477,10 @@ body::before,
     pointer-events: none;
 }
 
+.record-slide.is-playing .vinyl-link::after {
+    animation: vinyl-sheen-rotation 14s linear infinite;
+}
+
 .vinyl-disc {
     position: relative;
     z-index: 1;
@@ -1474,6 +1490,22 @@ body::before,
     overflow: hidden;
     border-radius: 50%;
     background: var(--accent);
+}
+
+.record-slide.is-playing .vinyl-disc {
+    animation: vinyl-label-rotation 14s linear infinite;
+}
+
+@keyframes vinyl-label-rotation {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+@keyframes vinyl-sheen-rotation {
+    to {
+        transform: rotate(1turn);
+    }
 }
 
 .vinyl-disc img {
@@ -1840,7 +1872,7 @@ body::before,
     color: rgba(17, 17, 15, 0.68);
 }
 
-.contact-card a span {
+.contact-card a .external-arrow {
     margin-left: 5px;
     color: var(--accent);
 }

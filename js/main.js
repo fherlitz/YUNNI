@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function renderRecordJourney(progress) {
             const activeIndex = Math.round(progress);
+            const isStopped = Math.abs(progress - activeIndex) < 0.001;
             recordSlides.forEach((slide, index) => {
                 const offset = progress - index;
                 const distance = Math.min(1, Math.abs(offset));
@@ -52,6 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 slide.style.opacity = opacity;
                 slide.style.zIndex = offset >= 0 ? '2' : '1';
                 slide.style.pointerEvents = index === activeIndex ? 'auto' : 'none';
+                slide.classList.toggle('is-stopped', isStopped && index === activeIndex);
+                if (isStopped && index === activeIndex) {
+                    slide.classList.add('is-playing');
+                } else if (offset >= 1) {
+                    slide.classList.remove('is-playing');
+                }
                 slide.inert = index !== activeIndex;
                 slide.setAttribute('aria-hidden', String(index !== activeIndex));
                 slide.style.setProperty('--record-scale', String(1 - distance * 0.1));
