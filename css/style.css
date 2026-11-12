@@ -1447,11 +1447,20 @@ body::before,
     color: var(--ink);
 }
 
-.live-presenters {
+.live-event-lineup {
+    max-width: 700px;
     margin: 28px 0 0;
-    color: rgba(246, 243, 235, 0.58);
-    font: 0.54rem/1.7 Arial, sans-serif;
-    letter-spacing: 0.1em;
+    color: rgba(246, 243, 235, 0.68);
+    font: 0.88rem/1.7 Arial, sans-serif;
+}
+
+.live-event-lineup em {
+    color: var(--paper);
+}
+
+.live-event-lineup strong {
+    color: var(--paper);
+    font-weight: 600;
 }
 
 .archive-section {
