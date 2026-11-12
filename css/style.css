@@ -1447,10 +1447,10 @@ body::before,
     color: var(--ink);
 }
 
-.live-event-lineup {
+#live .live-event-lineup {
     max-width: 700px;
     margin: 28px 0 0;
-    color: rgba(246, 243, 235, 0.68);
+    color: var(--paper);
     font: 0.88rem/1.7 Arial, sans-serif;
 }
 
